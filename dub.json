@@ -1,0 +1,14 @@
+{
+	"name": "dwinrt",
+	"authors": [
+		"webfreak"
+	],
+	"description": "WinRT for D",
+	"copyright": "Copyright © 2018, webfreak",
+	"license": "MIT",
+	"targetType": "none",
+	"subPackages": [
+		"base",
+		"uwp"
+	]
+}

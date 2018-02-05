@@ -1,0 +1,6 @@
+name "uwp"
+
+dependency "dwinrt:base" path=".."
+
+sourcePaths "."
+importPaths "."

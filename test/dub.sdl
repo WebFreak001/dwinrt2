@@ -1,0 +1,6 @@
+name "test"
+dependency "dwinrt:base" path=".."
+dependency "dwinrt:uwp" path=".."
+
+lflags "/MANIFEST:NO" "/NXCOMPAT" "/PDB:dwinrt.pdb" "/DYNAMICBASE" "/MACHINE:X64" "/WINMD" "/APPCONTAINER" "/INCREMENTAL" "/SUBSYSTEM:WINDOWS" "/ERRORREPORT:PROMPT" "/NOLOGO" "/WINMDFILE:dwinrt.winmd" "/TLBID:1" platform="x86_64"
+lflags "/MANIFEST:NO" "/NXCOMPAT" "/PDB:dwinrt.pdb" "/DYNAMICBASE" "/MACHINE:X86" "/WINMD" "/APPCONTAINER" "/INCREMENTAL" "/SUBSYSTEM:WINDOWS" "/ERRORREPORT:PROMPT" "/NOLOGO" "/WINMDFILE:dwinrt.winmd" "/TLBID:1" platform="x86_mscoff"
