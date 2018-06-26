@@ -2,6 +2,8 @@ module winrt.uuid;
 
 import core.sys.windows.windows : GUID;
 
+import std.traits;
+
 GUID uuid(string s)
 {
 	import std.uuid : parseUUID;
@@ -54,14 +56,6 @@ GUID uuidOfRt(T)()
 	return uuid;
 }
 
-wstring factoryNameOf(T)()
-{
-	foreach (attr; __traits(getAttributes, T))
-		static if (is(typeof(attr) == WinrtFactory))
-			return attr.name;
-	assert(false, T.stringof ~ " is no factory or has no WinrtFactory attached to it!");
-}
-
 struct WinrtName
 {
 	wstring name;
@@ -85,9 +79,35 @@ wstring winrtNameOf(T)()
 		return ret.to!wstring;
 }
 
-struct WinrtFactory
+struct WinrtFactory(Factory)
 {
-	wstring name;
 }
 
-enum winrtFactory(T) = WinrtFactory(winrtNameOf!T);
+/// Returns the class holding a WinrtFactory in the inheritance tree.
+template winrtFactoryClassOf(Class)
+{
+	alias factories = getUDAs!(Class, WinrtFactory);
+	static if (factories.length == 0)
+	{
+		alias base = BaseTypeTuple!Class;
+		static if (base.length == 0)
+			static assert(false, "Could not find factory on class");
+		else
+			alias winrtFactoryClassOf = winrtFactoryClassOf!(base[0]);
+	}
+	else static if (factories.length == 1)
+		alias winrtFactoryClassOf = Class;
+	else
+		static assert(false, "Multiple factories attached to " ~ Class.stringof);
+}
+
+template winrtFactoryOf(Class)
+{
+	alias factories = getUDAs!(Class, WinrtFactory);
+	static if (factories.length == 0)
+		static assert(false, "No factory attached to " ~ Class.stringof);
+	else static if (factories.length == 1 && is(factories[0] : WinrtFactory!U, U))
+		alias winrtFactoryOf = U;
+	else
+		static assert(false, "Multiple factories attached to " ~ Class.stringof);
+}
